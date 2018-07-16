@@ -2,24 +2,13 @@ import React, { Component } from 'react';
 import { FormShortText, FormLongText, FormCheckBox, FormDropDown } from './FormTypes';
 import { Card, CardTitle, CardContent, CardFooter, CardFuncButton } from './Card';
 import { Edit2, Delete, Plus, Send } from 'react-feather';
+import { Form } from './Form';
 
-export default class FormContent extends Component {
+export default class FormContent extends Form {
   constructor(props) {
     super(props);
-    this.api = 'http://ec2-34-217-104-207.us-west-2.compute.amazonaws.com/api/';
-    this.endpoint = 'check_lists'
-    this.title = props.title;
-    this.equipId = props.match.params.id;
-    this.frequency = props.frequency;
-    this.formType = 'template';
-    this.inputTypes = ['FormShortText', 'FormLongText', 'FormCheckBox'];
-
-    this.state = {
-      formStructure: [],
-      isEditable: false,
-      hasError: false,
-      id: null
-    };
+    //this.formType = 'template';
+    //this.equipId = props.match.params.id;
 
     this.handleValueChange = this.handleValueChange.bind(this);
     this.handleTypeChange = this.handleTypeChange.bind(this);
@@ -41,97 +30,6 @@ export default class FormContent extends Component {
       });
   }
 
-  handleValueChange(e, idx) {
-    const target = e.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-
-    let new_state = this.state.formStructure;
-
-    const formObject = {
-      name: value,
-      value: this.state.formStructure[idx].value,
-      type: this.state.formStructure[idx].type
-    }
-
-    new_state[idx] = formObject;
-
-    this.setState({ formStructure: new_state });
-  }
-
-  handleTypeChange(e, idx) {
-    const target = e.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-
-    let new_state = this.state.formStructure;
-
-    const formObject = {
-      name: this.state.formStructure[idx].name,
-      value: this.state.formStructure[idx].value,
-      type: value
-    }
-
-    new_state[idx] = formObject;
-
-    this.setState({ formStructure: new_state });
-  }
-
-  handleRemove(idx) {
-    this.setState({
-      formStructure: this.state.formStructure.filter((s, sidx) => idx !== sidx)
-    });
-  }
-
-  handleAdd() {
-    this.setState({
-      formStructure: this.state.formStructure.concat([{
-        name: '',
-        value: '',
-        type: 'FormShortText'
-      }])
-    });
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-    if(this.state.id === null){
-      var id = 'none';
-    } else {
-      var id = this.state.id;
-    }
-
-    const data = {
-      title: this.title,
-      equipmentId: this.equipId,
-      frequency: this.frequency,
-      formType: this.formType,
-      data: this.state.formStructure,
-      id: id
-    }
-
-    fetch(this.api + this.endpoint, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    })
-    .then((response) => response.json())
-    .then((resJson) => {
-      this.setState({
-        id: resJson.id
-      });
-    })
-    .catch((error) => { this.setState({ hasError: true })})
-    this.handleEditable();
-  }
-
-  handleEditable() {
-    this.setState({
-      isEditable: !this.state.isEditable
-    })
-  }
-
   buildFormStructure() {
     if(this.state.formStructure !== null) {
       var inputs = this.state.formStructure.map((item, idx) => {
@@ -141,8 +39,8 @@ export default class FormContent extends Component {
               <div>
                 <FormShortText
                   title='Input Name'
-                  value={item.name}
-                  handleChange={(e) => {this.handleValueChange(e, idx)}}
+                  value={item.instruction}
+                  handleChange={(e) => {this.handleInstructionChange(e, idx)}}
                 />
                 <FormDropDown
                   title={'Input Type'}
@@ -166,30 +64,6 @@ export default class FormContent extends Component {
       var inputs = '';
     }
     return inputs;
-  }
-
-  formError() {
-    if(this.state.hasError) {
-      return (
-        <div className="form_container">Submit Error
-        </div>
-      );
-    }
-  }
-
-  daysToFrequencyName(days){
-    switch(days){
-      case '7':
-        return 'Weekly';
-      case '30':
-        return 'Monthly';
-      case '90':
-        return 'Quarterly';
-      case '365':
-        return 'Yearly';
-      default:
-        return days;
-    }
   }
 
   editForm() {
@@ -224,13 +98,13 @@ export default class FormContent extends Component {
   viewForm(formData) {
     function typeConversion(i){
       if (i.type === 'FormShortText') {
-        return <FormShortText title={i.name} readOnly='true'/>
+        return <FormShortText title={i.instruction} readOnly='true'/>
       }
       else if (i.type === 'FormLongText') {
-        return <FormLongText title={i.name} readOnly='true'/>
+        return <FormLongText title={i.instruction} readOnly='true'/>
       }
       else if (i.type === 'FormCheckBox') {
-        return <FormCheckBox title={i.name} readOnly='true'/>
+        return <FormCheckBox title={i.instruction} readOnly='true'/>
       }
     }
 

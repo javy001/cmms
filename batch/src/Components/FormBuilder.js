@@ -127,6 +127,7 @@ export default class FormBuilder extends Component {
         id: resJson.id
       });
       this.setState({showModal: true});
+      console.log(data);
     })
     .catch((error) => { this.setState({ hasError: true })})
   }
