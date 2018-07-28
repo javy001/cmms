@@ -50,11 +50,11 @@ def add_site():
     VALUES({id}, '{street}', '{city}', '{state}', '{name}')
     """.format(
         id=id,
-        street=data.street,
-        city=data.city,
-        state=data.state,
-        name=data.name,
-        zip=data.zip
+        street=data['street'],
+        city=data['city'],
+        state=data['state'],
+        name=data['name'],
+        zip=data['zip']
     )
 
     engine.execute(sql)

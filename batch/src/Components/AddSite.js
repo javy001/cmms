@@ -25,7 +25,8 @@ export default class AddSite extends Component {
   }
 
   submit() {
-    let url = 'http://ec2-34-217-104-207.us-west-2.compute.amazonaws.com/api/add_site';
+    // let url = 'http://ec2-34-217-104-207.us-west-2.compute.amazonaws.com/api/add_site';
+    const url = 'http://localhost:5000/add_site';
     fetch(url, {
       method: 'POST',
       body: JSON.stringify({
