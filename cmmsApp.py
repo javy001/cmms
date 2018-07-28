@@ -12,6 +12,13 @@ engine = create_engine(con_string)
 
 app = Flask(__name__)
 
+
+def gen_id():
+    seconds = int(
+        (dt.datetime.now() - dt.datetime.strptime('1970-01-01', '%Y-%m-%d')).total_seconds()
+        )
+    return random.randint(1, 1000000) + seconds
+
 @app.route("/")
 def hello():
     return "Flask Index Page"
@@ -35,14 +42,30 @@ def form_data():
             })
     return json.dumps(response)
 
+@app.route("/add_site", methods=['POST'])
+def add_site():
+    data = request.get_json()
+    id = gen_id()
+    sql = """INSERT INTO test.sites (id, street, city, state, name)
+    VALUES({id}, '{street}', '{city}', '{state}', '{name}')
+    """.format(
+        id=id,
+        street=data.street,
+        city=data.city,
+        state=data.state,
+        name=data.name
+    )
+
+    engine.execute(sql)
+
+    return jsonify(data)
+
+
 @app.route("/check_lists", methods=['POST'])
 def check_lists():
     data = request.get_json()
     if data['id'] == 'none':
-        seconds = int(
-            (dt.datetime.now() - dt.datetime.strptime('1970-01-01', '%Y-%m-%d')).total_seconds()
-            )
-        id = random.randint(1, 1000000) + seconds
+        id = gen_id()
     else:
         id = data['id']
     sql = """INSERT INTO test.check_lists (id, equipment_id, form_data)
