@@ -47,14 +47,14 @@ def add_site():
     data = request.get_json()
     id = gen_id()
     sql = """INSERT INTO test.sites (id, street, city, state, name, zip)
-    VALUES({id}, '{street}', '{city}', '{state}', '{name}')
+    VALUES({id}, '{street}', '{city}', '{state}', '{name}', {zip})
     """.format(
         id=id,
-        street=data['street'],
-        city=data['city'],
-        state=data['state'],
-        name=data['name'],
-        zip=data['zip']
+        street=data['data']['street'],
+        city=data['data']['city'],
+        state=data['data']['state'],
+        name=data['data']['name'],
+        zip=data['data']['zip']
     )
 
     engine.execute(sql)
