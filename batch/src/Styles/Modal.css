@@ -3,6 +3,7 @@
   grid-area: pop-up;
   border-radius: 3px;
   padding: 10px;
+  min-width: 200px;
 }
 
 .overlay{

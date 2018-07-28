@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardTitle, CardContent, CardFooter, CardFuncButton } from './Card';
 import { Edit2, Delete, Plus, Send } from 'react-feather';
+import Modal from './Modal';
 
 export default class AddSite extends Component {
   constructor(props) {
@@ -10,10 +11,12 @@ export default class AddSite extends Component {
       street: '',
       city: '',
       state: '',
-      zip: ''
+      zip: '',
+      showModal: false
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.hideModal = this.hideModal.bind(this);
   }
 
   handleChange(event) {
@@ -40,46 +43,66 @@ export default class AddSite extends Component {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-
+        this.setState({
+          name: '',
+          street: '',
+          city: '',
+          state: '',
+          zip: '',
+          showModal: true
+        })
       });
   }
 
+  hideModal() {
+    this.setState({showModal: false});
+  }
+
   render(){
+    var modal;
+    if(this.state.showModal) {
+      modal = <Modal text="Data Saved" hideFunc={this.hideModal}/>;
+    } else {
+      modal = <div/>;
+    }
     return (
-      <Card>
-        <CardContent>
-          <table>
-            <tbody>
-              <tr>
-                <td>Site Name</td>
-                <td><input name="name" onChange={this.handleChange} type="text"/></td>
-              </tr>
-              <tr>
-                <td>Street Address</td>
-                <td><input name="street" onChange={this.handleChange} type="text"/></td>
-              </tr>
-              <tr>
-                <td>City</td>
-                <td><input name="city" onChange={this.handleChange} type="text"/></td>
-              </tr>
-              <tr>
-                <td>State</td>
-                <td><input name="state" onChange={this.handleChange} type="text"/></td>
-              </tr>
-              <tr>
-                <td>Zip Code</td>
-                <td><input name="zip" onChange={this.handleChange} type="text"/></td>
-              </tr>
-            </tbody>
-          </table>
-        </CardContent>
-        <CardFooter>
-          <CardFuncButton
-            icon={<Send size={18} />}
-            clickHandle={() => {this.submit()}}
-            text="Submit"/>
-        </CardFooter>
-      </Card>
+      <div>
+        {modal}
+        <Card>
+          <CardContent>
+            <table>
+              <tbody>
+                <tr>
+                  <td>Site Name</td>
+                  <td><input name="name" onChange={this.handleChange} type="text"/></td>
+                </tr>
+                <tr>
+                  <td>Street Address</td>
+                  <td><input name="street" onChange={this.handleChange} type="text"/></td>
+                </tr>
+                <tr>
+                  <td>City</td>
+                  <td><input name="city" onChange={this.handleChange} type="text"/></td>
+                </tr>
+                <tr>
+                  <td>State</td>
+                  <td><input name="state" onChange={this.handleChange} type="text"/></td>
+                </tr>
+                <tr>
+                  <td>Zip Code</td>
+                  <td><input name="zip" onChange={this.handleChange} type="text"/></td>
+                </tr>
+              </tbody>
+            </table>
+          </CardContent>
+          <CardFooter>
+            <CardFuncButton
+              icon={<Send size={18} />}
+              clickHandle={() => {this.submit()}}
+              text="Submit"/>
+          </CardFooter>
+        </Card>
+      </div>
     );
   }
 }
