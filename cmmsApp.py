@@ -71,7 +71,7 @@ def check_lists():
         id = data['id']
     sql = """INSERT INTO test.check_lists (id, equipment_id, form_data, frequency)
             VALUES ({id}, {eID}, '{blob}', {freq})
-            ON DUPLICATE KEY UPDATE form_data='{blob}' """.format(
+            ON DUPLICATE KEY UPDATE form_data='{blob}', frequency={freq}  """.format(
         id=id,
         eID=data['equipmentId'],
         blob=json.dumps(data['data']),

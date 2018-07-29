@@ -24,7 +24,8 @@ export default class FormBuilder extends Component {
     this.removeStep = this.removeStep.bind(this);
     this.changeStep = this.changeStep.bind(this);
     this.submitData = this.submitData.bind(this);
-    this.api = 'http://ec2-34-217-104-207.us-west-2.compute.amazonaws.com/api';
+    // this.api = 'http://ec2-34-217-104-207.us-west-2.compute.amazonaws.com/api';
+    this.api = 'http://localhost:5000';
     this.endpoint = '/check_lists';
     this.equipId = props.match.params.id;
   }
@@ -55,7 +56,8 @@ export default class FormBuilder extends Component {
           id: data.id,
           numSteps: steps.length,
           formData: data.form_data,
-          steps: steps
+          steps: steps,
+          frequency: data.frequency
         });
 
       })
@@ -144,7 +146,6 @@ export default class FormBuilder extends Component {
   }
 
   changeFreq(e) {
-    console.log(e.target.value);
     this.setState({frequency: e.target.value});
   }
 
