@@ -27,7 +27,7 @@ def hello():
 def form_data():
     equipId = request.args.get('equipId')
     sql = """
-        SELECT id, equipment_id, form_data, frequency
+        SELECT id, equipment_id, form_data, frequency, due_date
         FROM test.check_lists
         WHERE equipment_id = {0}
     """.format(equipId)
@@ -39,7 +39,8 @@ def form_data():
             'id': row[0],
             'equipId': row[1],
             'form_data': json.loads(row[2]),
-            'frequency': row[3]
+            'frequency': row[3],
+            'nextDate': row[4]
             })
     return json.dumps(response)
 

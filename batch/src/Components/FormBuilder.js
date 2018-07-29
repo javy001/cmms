@@ -60,7 +60,8 @@ export default class FormBuilder extends Component {
           numSteps: steps.length,
           formData: newData,
           steps: steps,
-          frequency: data.frequency
+          frequency: data.frequency,
+          nextDate: data.nextDate
         });
 
       })
