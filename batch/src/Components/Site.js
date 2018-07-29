@@ -13,7 +13,6 @@ export default class Site extends Component {
 	    fetch(this.api)
 	      .then((results) => results.json())
 	      .then((responseJson) => {
-	        //console.log(responseJson);
 	        this.setState({
 	          sites: responseJson.map((data,index)=> (
 				  <SiteCard key={index} name={data.name} id={data.id} data={data}/>

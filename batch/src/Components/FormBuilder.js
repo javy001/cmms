@@ -3,6 +3,8 @@ import '../Styles/FormBuilder.css';
 import { Card, CardFooter, CardFuncButton } from './Card';
 import { Save, Edit2, PlusCircle, Delete, CornerDownRight } from 'react-feather';
 import Modal from './Modal';
+import { Redirect } from 'react-router-dom';
+import { uriSubDir } from '../Data/globalVars'
 
 export default class FormBuilder extends Component {
   constructor(props) {
@@ -12,7 +14,9 @@ export default class FormBuilder extends Component {
       steps:[],
       formData: {},
       id: null,
-      showModal: false
+      showModal: false,
+      redirect: false,
+      frequency: 90
     };
 
     this.addStep = this.addStep.bind(this);
@@ -29,19 +33,22 @@ export default class FormBuilder extends Component {
     fetch(this.api + '/form_data?equipId=' + this.equipId)
       .then(response => response.json())
       .then(resJson => {
+        console.log(resJson);
         const data = resJson[0];
         var steps = []
+        var i = 0;
         for(var key in data.form_data) {
           steps.push(
             <Step
-              key={key}
-              stepNum={key}
+              key={i}
+              stepNum={i}
               removeStep={this.removeStep}
               handleChange={this.changeStep}
               data={data.form_data[key]}
               canEdit={false}
             />
           );
+          i++;
         }
 
         this.setState({
@@ -110,9 +117,9 @@ export default class FormBuilder extends Component {
     const data = {
       equipmentId: this.equipId,
       data: this.state.formData,
-      id: id
-    }
-    // 'http://127.0.0.1:5000'
+      id: id,
+      frequency: this.state.frequency
+    };
     fetch(this.api + this.endpoint, {
       method: 'POST',
       headers: {
@@ -133,10 +140,18 @@ export default class FormBuilder extends Component {
   }
 
   hideModal() {
-    this.setState({showModal: false});
+    this.setState({redirect: true});
+  }
+
+  changeFreq(e) {
+    console.log(e.target.value);
+    this.setState({frequency: e.target.value});
   }
 
   render() {
+    if(this.state.redirect) {
+      return <Redirect to={uriSubDir + "/equip/" + this.props.match.params.id } />;
+    }
     var modal;
     if(this.state.showModal) {
       modal = <Modal text="Data Saved!" hideFunc={this.hideModal}/>;
@@ -147,13 +162,21 @@ export default class FormBuilder extends Component {
       <div>
         {modal}
         <div>
+          <span className="hspacer">Frequency</span>
+          <select name="frequency"
+            onChange={(event) => this.changeFreq(event)}
+            value={this.state.frequency}
+            >
+            <option value={30}>Monthly</option>
+            <option value={90}>Quarterly</option>
+          </select>
+        </div>
+        <div>
           {this.state.steps}
         </div>
         <div className='add-btn'>
-          {/* <PlusCircle onClick={this.addStep} color={'#9E9E9E'}/> */}
           <span className='btn' onClick={this.addStep}>Add Step</span>
           <span className='hspacer-big'/>
-          {/* <CornerDownRight onClick={this.submitData} color={'#9E9E9E'}/> */}
           <span className='btn' onClick={this.submitData} >Submit</span>
         </div>
       </div>

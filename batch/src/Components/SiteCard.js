@@ -17,6 +17,7 @@ export default class SiteCard extends Component {
           </CardContent>
           <CardFooter buttons={[
             <CardLinkButton
+              key={0}
               icon={<Clipboard size={18}/>}
               link={uriSubDir + '/equip/' + this.props.id}
               text={'Equipment'}

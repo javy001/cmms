@@ -69,16 +69,18 @@ def check_lists():
         id = gen_id()
     else:
         id = data['id']
-    sql = """INSERT INTO test.check_lists (id, equipment_id, form_data)
-            VALUES ({id}, {eID}, '{blob}')
+    sql = """INSERT INTO test.check_lists (id, equipment_id, form_data, frequency)
+            VALUES ({id}, {eID}, '{blob}', {freq})
             ON DUPLICATE KEY UPDATE form_data='{blob}' """.format(
         id=id,
         eID=data['equipmentId'],
-        blob=json.dumps(data['data'])
+        blob=json.dumps(data['data']),
+        freq=data['frequency']
         )
     engine.execute(sql)
     data['id'] = id
     return jsonify(data)
+
 
 @app.route("/equipment")
 def equipment():
