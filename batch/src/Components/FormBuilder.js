@@ -37,7 +37,8 @@ export default class FormBuilder extends Component {
         console.log(resJson);
         const data = resJson[0];
         var steps = []
-        var i = 0;
+        var i = 1;
+        var newData = {};
         for(var key in data.form_data) {
           steps.push(
             <Step
@@ -49,13 +50,14 @@ export default class FormBuilder extends Component {
               canEdit={false}
             />
           );
+          newData[i] = data.form_data[key];
           i++;
         }
 
         this.setState({
           id: data.id,
           numSteps: steps.length,
-          formData: data.form_data,
+          formData: newData,
           steps: steps,
           frequency: data.frequency
         });
