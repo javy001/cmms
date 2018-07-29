@@ -17,6 +17,7 @@ export default class FormBuilder extends Component {
       showModal: false,
       redirect: false,
       frequency: 90,
+      nextDate: '2020-01-01'
     };
 
     this.addStep = this.addStep.bind(this);
@@ -203,8 +204,13 @@ export default class FormBuilder extends Component {
                     onChange={(e) => this.changeDate(e)}
                   />;
     } else {
+      const d = new Date(this.state.nextDate);
       dateSelect = (
-        <select name="maintDate" onChange={(e) => this.changeDate(e)}>
+        <select
+          name="maintDate"
+          onChange={(e) => this.changeDate(e)}
+          value={d.getMonth() + 1}
+          >
           <option value={1}>Jan</option>
           <option value={2}>Feb</option>
           <option value={3}>Mar</option>
