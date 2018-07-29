@@ -16,7 +16,7 @@ export default class FormBuilder extends Component {
       id: null,
       showModal: false,
       redirect: false,
-      frequency: 90
+      frequency: 90,
     };
 
     this.addStep = this.addStep.bind(this);
@@ -24,6 +24,7 @@ export default class FormBuilder extends Component {
     this.removeStep = this.removeStep.bind(this);
     this.changeStep = this.changeStep.bind(this);
     this.submitData = this.submitData.bind(this);
+    this.changeFreq = this.changeFreq.bind(this);
     this.api = 'http://ec2-34-217-104-207.us-west-2.compute.amazonaws.com/api';
     // this.api = 'http://localhost:5000';
     this.endpoint = '/check_lists';
@@ -122,7 +123,8 @@ export default class FormBuilder extends Component {
       equipmentId: this.equipId,
       data: this.state.formData,
       id: id,
-      frequency: this.state.frequency
+      frequency: this.state.frequency,
+      nextDate: this.state.nextDate
     };
     fetch(this.api + this.endpoint, {
       method: 'POST',
@@ -148,7 +150,36 @@ export default class FormBuilder extends Component {
   }
 
   changeFreq(e) {
-    this.setState({frequency: e.target.value});
+    this.setState({
+      frequency: e.target.value * 1
+    });
+  }
+
+  changeDate(e) {
+    var year;
+    if (this.state.frequency === 7) {
+      this.setState({nextDate: e.target.value})
+    } else {
+      const selectedMonth = e.target.value;
+      const d = new Date();
+      const month = d.getMonth() + 1;
+      if (selectedMonth < month) {
+        year = d.getFullYear() + 1;
+      } else {
+        year = d.getFullYear();
+      }
+      var zero;
+      if (selectedMonth < 10) {
+        zero = '0';
+      } else {
+        zero = '';
+      }
+      const day = new Date(year, selectedMonth, 0);
+      const ds =  year + '-' + zero + selectedMonth + '-' + day.getDate();
+      this.setState({nextDate: ds })
+      console.log(ds);
+
+    }
   }
 
   render() {
@@ -161,6 +192,33 @@ export default class FormBuilder extends Component {
     } else {
       modal = <div/>;
     }
+
+    var dateSelect;
+    if(this.state.frequency === 7) {
+      dateSelect = <input
+                    type="date"
+                    name="maintDate"
+                    value={this.state.nextDate}
+                    onChange={(e) => this.changeDate(e)}
+                  />;
+    } else {
+      dateSelect = (
+        <select name="maintDate" onChange={(e) => this.changeDate(e)}>
+          <option value={1}>Jan</option>
+          <option value={2}>Feb</option>
+          <option value={3}>Mar</option>
+          <option value={4}>Apr</option>
+          <option value={5}>May</option>
+          <option value={6}>Jun</option>
+          <option value={7}>Jul</option>
+          <option value={8}>Aug</option>
+          <option value={9}>Sep</option>
+          <option value={10}>Oct</option>
+          <option value={11}>Nov</option>
+          <option value={12}>Dec</option>
+        </select>
+      );
+    }
     return (
       <div>
         {modal}
@@ -172,7 +230,12 @@ export default class FormBuilder extends Component {
             >
             <option value={30}>Monthly</option>
             <option value={90}>Quarterly</option>
+            <option value={7}>Weekly</option>
           </select>
+        </div>
+        <div className="topspacer">
+          <span className="hspacer">Next Maintainence:</span>
+          {dateSelect}
         </div>
         <div>
           {this.state.steps}

@@ -70,13 +70,14 @@ def check_lists():
         id = gen_id()
     else:
         id = data['id']
-    sql = """INSERT INTO test.check_lists (id, equipment_id, form_data, frequency)
-            VALUES ({id}, {eID}, '{blob}', {freq})
-            ON DUPLICATE KEY UPDATE form_data='{blob}', frequency={freq}  """.format(
+    sql = """INSERT INTO test.check_lists (id, equipment_id, form_data, frequency, due_date)
+            VALUES ({id}, {eID}, '{blob}', {freq}, '{ds}')
+            ON DUPLICATE KEY UPDATE form_data='{blob}', frequency={freq}, due_date='{ds}'  """.format(
         id=id,
         eID=data['equipmentId'],
         blob=json.dumps(data['data']),
-        freq=data['frequency']
+        freq=data['frequency'],
+        ds=data['nextDate']
         )
     engine.execute(sql)
     data['id'] = id
