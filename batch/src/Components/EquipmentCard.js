@@ -9,8 +9,8 @@ export default class EquipmentCard extends Component {
     return (
       <div>
         <Card>
-          <CardTitle text={ this.props.serial } />
-          <CardContent text={ this.props.name }>
+          <CardTitle text={ this.props.name } />
+          <CardContent text={ this.props.serial }>
             <CardContent text={ this.props.manufacturer } />
             <CardContent text={ this.props.description } />
           </CardContent>

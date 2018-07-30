@@ -241,7 +241,7 @@ export default class FormBuilder extends Component {
           </select>
         </div>
         <div className="topspacer">
-          <span className="hspacer">Next Maintainence:</span>
+          <span className="hspacer">Next Maintenance:</span>
           {dateSelect}
         </div>
         <div>

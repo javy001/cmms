@@ -44,6 +44,26 @@ def form_data():
             })
     return json.dumps(response)
 
+@app.route("/add_equipment", methods=['POST'])
+def add_equipment():
+    data = request.get_json()
+    id = gen_id()
+    sql = """INSERT INTO test.equipment (id, site_id, name, make, serial_number, description)
+    VALUES({id}, {site_id}, '{name}', '{make}', '{serial}', '{description}')
+    """.format(
+        id=id,
+        site_id=data['data']['site_id'],
+        name=data['data']['name'],
+        make=data['data']['manufacturer'],
+        serial=data['data']['serial'],
+        description=data['data']['description'],
+    )
+
+    engine.execute(sql)
+
+    return jsonify(data)
+
+
 @app.route("/add_site", methods=['POST'])
 def add_site():
     data = request.get_json()

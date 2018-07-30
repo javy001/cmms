@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardTitle, CardContent, CardFooter, CardLinkButton } from './Card';
 import { uriSubDir } from '../Data/globalVars'
-import { Clipboard } from 'react-feather';
+import { Clipboard, Plus } from 'react-feather';
 
 export default class SiteCard extends Component {
 
@@ -20,7 +20,13 @@ export default class SiteCard extends Component {
               key={0}
               icon={<Clipboard size={18}/>}
               link={uriSubDir + '/equip/' + this.props.id}
-              text={'Equipment'}
+              text={'View Equipment'}
+            />,
+            <CardLinkButton
+              key={1}
+              icon={<Plus size={18}/>}
+              link={uriSubDir + '/add_equipment/' + this.props.id}
+              text={'Add Equipment'}
             />
           ]}/>
         </Card>

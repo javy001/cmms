@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
-import { Card, CardTitle, CardContent, CardFooter, CardFuncButton } from './Card';
-import { Edit2, Delete, Plus, Send } from 'react-feather';
+import { Card, CardContent, CardFooter, CardFuncButton } from './Card';
+import { Clipboard, Send } from 'react-feather';
 import { Redirect } from 'react-router-dom';
-import Modal from './Modal';
 import { uriSubDir } from '../Data/globalVars';
 
-export default class AddSite extends Component {
+export default class AddEquipment extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      street: '',
-      city: '',
-      state: '',
-      zip: '',
-      redirect: false
+      redirect: false,
+      site_id: this.props.match.params.id
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -29,12 +24,13 @@ export default class AddSite extends Component {
   }
 
   submit() {
-    let url = 'http://ec2-34-217-104-207.us-west-2.compute.amazonaws.com/api/add_site';
-    // const url = 'http://localhost:5000/add_site';
+    let url = 'http://ec2-34-217-104-207.us-west-2.compute.amazonaws.com/api/add_equipment';
+    // const url = 'http://localhost:5000/add_equipment';
+    var data  = this.state;
     fetch(url, {
       method: 'POST',
       body: JSON.stringify({
-					data: this.state
+					data: data
 				}),
       headers: {
       'user-agent': 'Mozilla/4.0 MDN Example',
@@ -51,8 +47,8 @@ export default class AddSite extends Component {
   }
 
   render(){
-    if(this.state.redirect) {
-      return <Redirect to={uriSubDir + "/sites"} />
+    if (this.state.redirect) {
+      return <Redirect to={uriSubDir + '/equip/' + this.state.site_id} />
     }
     return (
       <Card>
@@ -60,24 +56,24 @@ export default class AddSite extends Component {
           <table>
             <tbody>
               <tr>
-                <td>Site Name</td>
+                <td>Equipment Name</td>
                 <td><input name="name" onChange={this.handleChange} type="text"/></td>
               </tr>
               <tr>
-                <td>Street Address</td>
-                <td><input name="street" onChange={this.handleChange} type="text"/></td>
+                <td>Manufacturer</td>
+                <td><input name="manufacturer" onChange={this.handleChange} type="text"/></td>
               </tr>
               <tr>
-                <td>City</td>
-                <td><input name="city" onChange={this.handleChange} type="text"/></td>
+                <td>Model</td>
+                <td><input name="model" onChange={this.handleChange} type="text"/></td>
               </tr>
               <tr>
-                <td>State</td>
-                <td><input name="state" onChange={this.handleChange} type="text"/></td>
+                <td>Serial Number</td>
+                <td><input name="serial" onChange={this.handleChange} type="text"/></td>
               </tr>
               <tr>
-                <td>Zip Code</td>
-                <td><input name="zip" onChange={this.handleChange} type="text"/></td>
+                <td>Description</td>
+                <td><textarea name="description" onChange={this.handleChange}/></td>
               </tr>
             </tbody>
           </table>

@@ -7,6 +7,7 @@ import FormContent from './FormContent';
 import FormBuilder from './FormBuilder';
 import FormViewer from './FormViewer';
 import AddSite from './AddSite';
+import AddEquipment from './AddEquipment';
 import Callback from './Callback';
 import SettingsCard from './SettingsCard';
 import { formData, formTitle } from '../Data/FormData';
@@ -31,6 +32,7 @@ export default class Content extends Component {
               <Route path={uriSubDir + '/settings'} component={SettingsCard} />
               <Route path={uriSubDir + '/view_form/:id'} component={FormViewer}/>
               <Route path={uriSubDir + '/add_site'} component={AddSite}/>
+              <Route path={uriSubDir + '/add_equipment/:id'} component={AddEquipment}/>
               <Route component={Site} />
       </Switch>
     </div>
