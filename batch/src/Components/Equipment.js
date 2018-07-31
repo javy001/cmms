@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import EquipmentCard from './EquipmentCard';
+import { url } from '../Data/globalVars';
 
 export default class Equipment extends Component {
 	constructor() {
@@ -7,7 +8,7 @@ export default class Equipment extends Component {
 	    this.state = {
 	      equipment: null
 	    };
-	    this.api = 'http://ec2-34-217-104-207.us-west-2.compute.amazonaws.com/api/test_equipment?id=';
+	    this.api = url + '/test_equipment?id=';
 
 	}
 
@@ -23,7 +24,8 @@ export default class Equipment extends Component {
 								manufacturer={value.manufacturer}
 								name={value.name}
 								description={value.description}
-								id={value.id}
+								site_id={this.props.match.params.id}
+								equipment_id={value.equipment_id}
 							/>
 						))
 	        });

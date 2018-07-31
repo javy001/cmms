@@ -9,7 +9,6 @@ from flask import request
 engine = create_engine(con_string)
 
 
-
 app = Flask(__name__)
 
 
@@ -27,9 +26,19 @@ def hello():
 def form_data():
     equipId = request.args.get('equipId')
     sql = """
-        SELECT id, equipment_id, form_data, frequency, due_date
-        FROM test.check_lists
-        WHERE equipment_id = {0}
+        SELECT
+            cl.id,
+            equipment_id,
+            form_data,
+            frequency,
+            due_date,
+            site_id
+        FROM
+            test.check_lists cl
+            LEFT JOIN test.equipment e
+            ON cl.equipment_id = e.id
+        WHERE
+            cl.equipment_id = {0}
     """.format(equipId)
 
     res = engine.execute(sql).fetchall()
@@ -40,7 +49,8 @@ def form_data():
             'equipId': row[1],
             'form_data': json.loads(row[2]),
             'frequency': row[3],
-            'nextDate': row[4]
+            'nextDate': row[4],
+            'site_id': row[5]
             })
     return json.dumps(response)
 
@@ -105,20 +115,21 @@ def check_lists():
     return jsonify(data)
 
 
-@app.route("/equipment")
-def equipment():
-    site_id = request.args.get('id')
-    sql = "select name, description from prod.equipment where site_id={0}".format(site_id)
-    res = engine.execute(sql).fetchall()
-    response = []
-    for row in res:
-        response.append({'name': row[0], 'description': row[1]})
-    return json.dumps(response)
-
 @app.route("/test_equipment")
 def test_equipment():
     site_id = request.args.get('id')
-    sql = "select name, description, serial_number, make, id from test.equipment where site_id={0}".format(site_id)
+    sql = """
+        SELECT
+            name,
+            description,
+            serial_number,
+            make,
+            id
+        FROM
+            test.equipment
+        WHERE
+            site_id={0}
+        """.format(site_id)
     res = engine.execute(sql).fetchall()
     response = []
     for row in res:
@@ -127,7 +138,7 @@ def test_equipment():
             'description': row[1],
             'serial_number': row[2],
             'manufacturer': row[3],
-            'id': row[4]
+            'equipment_id': row[4]
             })
     return json.dumps(response)
 

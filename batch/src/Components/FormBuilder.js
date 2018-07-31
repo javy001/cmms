@@ -4,7 +4,7 @@ import { Card, CardFooter, CardFuncButton } from './Card';
 import { Save, Edit2, PlusCircle, Delete, CornerDownRight } from 'react-feather';
 import Modal from './Modal';
 import { Redirect } from 'react-router-dom';
-import { uriSubDir } from '../Data/globalVars'
+import { uriSubDir, url } from '../Data/globalVars'
 
 export default class FormBuilder extends Component {
   constructor(props) {
@@ -17,7 +17,8 @@ export default class FormBuilder extends Component {
       showModal: false,
       redirect: false,
       frequency: 90,
-      nextDate: '2020-01-01'
+      nextDate: '2020-01-01',
+      equipment_id: this.props.match.params.id
     };
 
     this.addStep = this.addStep.bind(this);
@@ -26,7 +27,7 @@ export default class FormBuilder extends Component {
     this.changeStep = this.changeStep.bind(this);
     this.submitData = this.submitData.bind(this);
     this.changeFreq = this.changeFreq.bind(this);
-    this.api = 'http://ec2-34-217-104-207.us-west-2.compute.amazonaws.com/api';
+    this.api = url;
     // this.api = 'http://localhost:5000';
     this.endpoint = '/check_lists';
     this.equipId = props.match.params.id;
@@ -36,7 +37,6 @@ export default class FormBuilder extends Component {
     fetch(this.api + '/form_data?equipId=' + this.equipId)
       .then(response => response.json())
       .then(resJson => {
-        console.log(resJson);
         const data = resJson[0];
         var steps = []
         var i = 1;
@@ -62,7 +62,8 @@ export default class FormBuilder extends Component {
           formData: newData,
           steps: steps,
           frequency: data.frequency,
-          nextDate: data.nextDate
+          nextDate: data.nextDate,
+          site_id: data.site_id
         });
 
       })
@@ -142,7 +143,6 @@ export default class FormBuilder extends Component {
         id: resJson.id
       });
       this.setState({showModal: true});
-      console.log(data);
     })
     .catch((error) => { this.setState({ hasError: true })})
   }
@@ -179,14 +179,13 @@ export default class FormBuilder extends Component {
       const day = new Date(year, selectedMonth, 0);
       const ds =  year + '-' + zero + selectedMonth + '-' + day.getDate();
       this.setState({nextDate: ds })
-      console.log(ds);
 
     }
   }
 
   render() {
     if(this.state.redirect) {
-      return <Redirect to={uriSubDir + "/equip/" + this.props.match.params.id } />;
+      return <Redirect to={uriSubDir + "/equip/" + this.state.site_id } />;
     }
     var modal;
     if(this.state.showModal) {

@@ -20,13 +20,13 @@ export default class SiteCard extends Component {
               key={0}
               icon={<Clipboard size={18}/>}
               link={uriSubDir + '/equip/' + this.props.id}
-              text={'View Equipment'}
+              text={'View'}
             />,
             <CardLinkButton
               key={1}
               icon={<Plus size={18}/>}
               link={uriSubDir + '/add_equipment/' + this.props.id}
-              text={'Add Equipment'}
+              text={'Add'}
             />
           ]}/>
         </Card>

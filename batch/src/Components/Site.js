@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SiteCard from './SiteCard';
+import { url } from '../Data/globalVars';
 
 export default class Site extends Component {
 	constructor(props){
@@ -7,7 +8,7 @@ export default class Site extends Component {
 		this.state = {
 			sites: null,
 		};
-		this.api = 'http://ec2-34-217-104-207.us-west-2.compute.amazonaws.com/api/test_sites';
+		this.api = url + '/test_sites';
 	}
 	componentDidMount(){
 	    fetch(this.api)
