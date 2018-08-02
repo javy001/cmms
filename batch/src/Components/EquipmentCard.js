@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardTitle, CardContent, CardFooter, CardLinkButton } from './Card';
 import { uriSubDir } from '../Data/globalVars';
-import { FileText, CheckSquare } from 'react-feather';
+import { FileText, CheckSquare, Edit2 } from 'react-feather';
 
 export default class EquipmentCard extends Component {
 

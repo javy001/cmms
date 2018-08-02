@@ -34,9 +34,8 @@ export default class NavBar extends Component {
         className="dropdown"
         onMouseLeave={( ()=>this.setState({showMenu: false}) )}
       >
-        <div><Link to={ uriSubDir + '/build_form/1'}>Checklist</Link></div>
+        <div><Link to={ uriSubDir + '/sites/'}>Sites</Link></div>
         <div><Link to={ uriSubDir + '/add_site'}>Add Site</Link></div>
-        <div><a>Link3</a></div>
       </div>;
     } else {
       menu = <div/>;
@@ -47,7 +46,7 @@ export default class NavBar extends Component {
         <div className="menu">
           <Menu onClick={this.toggleMenu} />
           <span>
-            <Link to={ uriSubDir + "/sites" }>
+            <Link to={ uriSubDir }>
               CMMS
             </Link>
           </span>

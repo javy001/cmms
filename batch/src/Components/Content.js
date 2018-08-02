@@ -10,6 +10,7 @@ import AddSite from './AddSite';
 import AddEquipment from './AddEquipment';
 import Callback from './Callback';
 import SettingsCard from './SettingsCard';
+import MaintenanceEvents from './MaintenanceEvents';
 import { formData, formTitle } from '../Data/FormData';
 import { uriSubDir } from '../Data/globalVars'
 
@@ -33,6 +34,7 @@ export default class Content extends Component {
               <Route path={uriSubDir + '/view_form/:id'} component={FormViewer}/>
               <Route path={uriSubDir + '/add_site'} component={AddSite}/>
               <Route path={uriSubDir + '/add_equipment/:id'} component={AddEquipment}/>
+              <Route path={ uriSubDir } exact component={MaintenanceEvents} />
               <Route component={Site} />
       </Switch>
     </div>
