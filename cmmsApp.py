@@ -22,6 +22,43 @@ def gen_id():
 def hello():
     return "Flask Index Page"
 
+@app.route("/get_events")
+def get_events():
+    sql = """
+        SELECT
+            e.id,
+            e.equipment_id,
+            check_list_id,
+            e.due_date,
+            form_data,
+            eq.name,
+            cl.frequency
+        FROM
+            test.events e
+            LEFT JOIN
+                test.check_lists cl
+                ON e.check_list_id = cl.id
+            LEFT JOIN
+                test.equipment eq
+                ON e.equipment_id = eq.id
+        WHERE
+            e.is_open = 1
+    """
+    results = engine.execute(sql).fetchall()
+    response = []
+    for row in results:
+        response.append({
+            'event_id': row[0],
+            'equipment_id': row[1],
+            'check_list_id': row[2],
+            'due_date': row[3],
+            'form_data': json.loads(row[4]),
+            'equipment_name': row[5],
+            'frequency': row[6]
+        })
+    return json.dumps(response)
+
+
 @app.route("/form_data")
 def form_data():
     equipId = request.args.get('equipId')
